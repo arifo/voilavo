@@ -1,0 +1,407 @@
+{
+  "aboutMe":" Hello I am Arif\n",
+  "birthday":"10/30/1985",
+  "chats":{
+    "SiMz0AKt90UWKUdzCX9fBuHXfmM2":{
+      "user":{
+        "id":"SiMz0AKt90UWKUdzCX9fBuHXfmM2",
+        "name":"Arif Arif",
+        "photoURL":"https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=2090458781236256&height=200&width=200&ext=1530606841&hash=AeR9emT86gnIcYpT"}}},"city":"Tashkent, Uzbekistan",
+        "gender":"male",
+        "geocode":"tx3",
+        "id":"SiMz0AKt90UWKUdzCX9fBuHXfmM2",
+        "name":"Arif Arif","notification": false,
+        "show":false,
+        "swipes":{"CLNJcqSL7nV5Y7n0HWGYXmulg5D2":true,"SiMz0AKt90UWKUdzCX9fBuHXfmM2":false,"Teo2kMngRmc7wIRdABO8EEkNzCE2":true},"token":" "}
+
+
+
+
+
+
+getImagesFromDB() {
+  return firebase
+    .database()
+    .ref(`cards/${firebase.auth().currentUser.uid}/images`)
+    .once('value', snapshot => {
+      const snapshotValue = snapshot.val() !== null ? snapshot.val() : [];
+      return snapshotValue;
+    });
+}
+
+{/* {loading && isLastElement ? (
+                  <ActivityIndicator size="large" />
+                ) : ( */}
+
+isEmpty(obj) {
+  // null and undefined are "empty"
+  if (obj == null) return true;
+
+  // Assume if it has a length property with a non-zero value
+  // that that property is correct.
+  if (obj.length > 0) return false;
+  if (obj.length === 0) return true;
+
+  // If it isn't an object at this point
+  // it is empty, but it can't be anything *but* empty
+  // Is it empty?  Depends on your application.
+  if (typeof obj !== 'object') return true;
+
+  // Otherwise, does it have any properties of its own?
+  // Note that this doesn't handle
+  // toString and valueOf enumeration bugs in IE < 9
+  for (const key in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, key)) return false;
+  }
+  return true;
+}
+
+
+<TouchableOpacity onPress={this.onLogin} style={[styles.button, { marginTop: 15 }]}>
+          <LinearGradient
+            colors={['#4c669f', '#3b5998', '#192f6a']}
+            style={{ padding: 15, alignItems: 'center', borderRadius: 25 }}
+          >
+            <Text style={styles.buttonText}>LOGIN WITH FACEBOOK</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={this.onPhoneAuth} style={[styles.button, { marginTop: 15 }]}>
+          <LinearGradient
+            colors={['#eff1f2', '#c2c5c6', '#424242']}
+            style={{ padding: 15, alignItems: 'center', borderRadius: 25 }}
+          >
+            <Text style={[styles.buttonText]}>LOGIN WITH PHONENUMBER</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+
+
+dispatch({ type: LOGIN, user: snapshot.val(), loggedIn: true });
+
+dispatch({ type: LOGIN, user: params, loggedIn: true });
+
+
+getUserFromDB(ref, child) {
+  return firebase
+    .database()
+    .ref(ref)
+    .child(child)
+    .once('value', snapshot => snapshot.val());
+}
+
+updateDB(fullPath, params) {
+  return firebase
+    .database()
+    .ref(fullPath)
+    .update(params);
+}
+
+
+
+
+
+
+{
+  "uid":"3EalgzIoWWelEV28MMAECZw29fm2",
+  "displayName":"Bender Ander",
+  "photoURL":"https://graph.facebook.com/786236165099740/picture",
+  "email":null,
+  "emailVerified":false,
+  "phoneNumber":null,
+  "isAnonymous":false,
+  "providerData":[{
+    "uid":"786236165099740",
+    "displayName":"Bender Ander",
+    "photoURL":"https://graph.facebook.com/786236165099740/picture",
+    "email":null,
+    "phoneNumber":null,
+    "providerId":"facebook.com"
+    }],
+  "apiKey":"AIzaSyBWigPuTaPl5vJfYCOP94BfsqD6PYkagT0",
+  "appName":"[DEFAULT]",
+  "authDomain":"voilavo-a59eb.firebaseapp.com",
+  "stsTokenManager":{
+    "apiKey":"AIzaSyBWigPuTaPl5vJfYCOP94BfsqD6PYkagT0",
+    "refreshToken":"AGdpqey2qvnMBkkc0bgHKB_skKJlkpzlKSe0RRPW_o4GLxw8s60MOs8RBC62Ti1j-XpXGB47Iu0TIYl9DEx0z_Dh5K8Gjo3akyZm-MX3r13QkTRDcB80mAcLsohHK2i_CRgwJfHUS3OHjoPG-Yoj4Iy_d0vnnmQ7Dok7N88-F1KiTswWB92ELr1Dm9dh5sYlOiMBVYz5ReUyaVD91nthvXoJK5oydoZW4ME7jffdd7KNLmLu-zMlKn_RVivDaVzC51b9rz70GugyXNUF6bcJyDc-2j47lrA0PA",
+    "accessToken":"eyJhbGciOiJSUzI1NiIsImtpZCI6IjAwOTZhZDZmZjdjMTIwMzc5MzFiMGM0Yzk4YWE4M2U2ZmFkOTNlMGEifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdm9pbGF2by1hNTllYiIsIm5hbWUiOiJCZW5kZXIgQW5kZXIiLCJwaWN0dXJlIjoiaHR0cHM6Ly9ncmFwaC5mYWNlYm9vay5jb20vNzg2MjM2MTY1MDk5NzQwL3BpY3R1cmUiLCJhdWQiOiJ2b2lsYXZvLWE1OWViIiwiYXV0aF90aW1lIjoxNTMwMjcwODQzLCJ1c2VyX2lkIjoiM0VhbGd6SW9XV2VsRVYyOE1NQUVDWncyOWZtMiIsInN1YiI6IjNFYWxneklvV1dlbEVWMjhNTUFFQ1p3MjlmbTIiLCJpYXQiOjE1MzAyNzU1ODUsImV4cCI6MTUzMDI3OTE4NSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJmYWNlYm9vay5jb20iOlsiNzg2MjM2MTY1MDk5NzQwIl19LCJzaWduX2luX3Byb3ZpZGVyIjoiZmFjZWJvb2suY29tIn19.lhr7mTi-7TohzTdQPdwMo7XTo5sNyiAdMDCHthHcn8ElMDjSBaNetz40zmesbqygzA6TkZbepf9yM1ApxoBD2FynTfNYoDFN3TdIKQd2yUDM9vWHUW9AxLyADLKpaYk_vyFv6qzloi8s-g5CbmDRJtYRFwWR9J-7Y6BQ3ln_-9OR8X6ILif5NcmHOuvDNGDt0t0Ux3WbZCRj_NkNSuDjlj7972Hzf4OoReT0-pr-ycc_imhp6bVzf6B2FCmSinI29yT7d5XZ0uxmOnNDMQRQUZLmA6_IyVB6rRJslNsj6kLBGQL6nR_hUdIVrtH-UaHRwLUeiT_uCdSo-bkwgPU0Hg",
+    "expirationTime":1530279186382
+    },
+  "redirectEventId":null,
+  "lastLoginAt":"1530271454000",
+  "createdAt":"1530226624000"
+}
+
+
+
+{
+  "uid": "oZ4tk4ifpje7SmdtoXEyeLYNwGn1",
+  "displayName": "Arif Arif",
+  "photoURL": "https://graph.facebook.com/2090458781236256/picture",
+  "email": null,
+  "emailVerified": false,
+  "phoneNumber": null,
+  "isAnonymous": false,
+  "providerData": [
+    {
+      "uid": "2090458781236256",
+      "displayName": "Arif Arif",
+      "photoURL": "https://graph.facebook.com/2090458781236256/picture",
+      "email": null,
+      "phoneNumber": null,
+      "providerId": "facebook.com"
+    }
+  ],
+  "apiKey": "AIzaSyBWigPuTaPl5vJfYCOP94BfsqD6PYkagT0",
+  "appName": "[DEFAULT]",
+  "authDomain": "voilavo-a59eb.firebaseapp.com",
+  "stsTokenManager": {
+    "apiKey": "AIzaSyBWigPuTaPl5vJfYCOP94BfsqD6PYkagT0",
+    "refreshToken":
+      "AK2wQ-wHBiUzzSjzQiGMMUQCRyiHRxEFU0EdEd3XdTteGsdm0x584mGC6O7etHu4Efdtmgb8gyOrskXbg95_HtfPLZNIAwVIOMIomTUFfqDaDxJ1FVl6t1qL_RXAP80KLr8OR0LB7XiopAK3GN7YhdO-4xl4eFdRdTek_726dxZZC8pErKJN46q6DefIRCoDIr04OgyjeQhRwgZYelAy98RP1I_rb4AEVPv5q2h4Gg1AQ6Oh20pgaZlGPMI0-DqIzerxUyk449dnEWLMUJoJDYJmqg0dyOEVpQ",
+    "accessToken":
+      "eyJhbGciOiJSUzI1NiIsImtpZCI6IjAwOTZhZDZmZjdjMTIwMzc5MzFiMGM0Yzk4YWE4M2U2ZmFkOTNlMGEifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdm9pbGF2by1hNTllYiIsIm5hbWUiOiJBcmlmIEFyaWYiLCJwaWN0dXJlIjoiaHR0cHM6Ly9ncmFwaC5mYWNlYm9vay5jb20vMjA5MDQ1ODc4MTIzNjI1Ni9waWN0dXJlIiwiYXVkIjoidm9pbGF2by1hNTllYiIsImF1dGhfdGltZSI6MTUzMDEzMTA0NCwidXNlcl9pZCI6Im9aNHRrNGlmcGplN1NtZHRvWEV5ZUxZTndHbjEiLCJzdWIiOiJvWjR0azRpZnBqZTdTbWR0b1hFeWVMWU53R24xIiwiaWF0IjoxNTMwMTMxMDQ0LCJleHAiOjE1MzAxMzQ2NDQsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZmFjZWJvb2suY29tIjpbIjIwOTA0NTg3ODEyMzYyNTYiXX0sInNpZ25faW5fcHJvdmlkZXIiOiJmYWNlYm9vay5jb20ifX0.WxckemEBl-hBvMNVLv6eqLyYkjJ9IUIhjdODYdxO0vt6s2k2uwEm9UAw6lR6-ILiCD5N1iFEOOkhPdPeBRHUPzh5ArVD0bSbh_7aXnqDWkzmIVkj0D4tYAjhLPhHrI2KBcPOOjruPh-4925tTYPzqpGseBF714Gd9IkTyKKwaJYV51wvIX7PHKH3fHgL-vLrzlbY4t8fC396Z9srmxnN9EhWB1_fiR7iOp55AzyNeHLbqvSGB1qJQEFF5rcaPk1DwjVTFzs-t0b3xOq9OWm8mPTBCfRxt8KsPgush0qbfwytvgvSVef1pAvNe611IEygQFr9j_UImx7n9qJUxA89Fw",
+    "expirationTime": 1530134644649
+  },
+  "redirectEventId": null,
+  "lastLoginAt": "1530130957000",
+  "createdAt": "1529786140000"
+}
+
+
+
+
+
+let accessToken = ‘’;
+  Expo.Facebook.logInWithReadPermissionsAsync(appSecrets.facebook.clientID, {
+  permissions: [‘public_profile’, ‘email’, ‘user_birthday’],
+})
+  .then((response) => {
+    switch (response.type) {
+      case ‘success’:
+      const credential = await firebase.auth.FacebookAuthProvider.credential(token);
+
+      firebase
+        .auth()
+        .signInAndRetrieveDataWithCredential(credential)
+        .catch(error => {
+          Alert.alert('Try Again');
+          console.log(`firebase auth error${error}`);
+        });
+        return response.token;
+     case ‘cancel’:
+       reject({
+         type: ‘error’,
+         msg: ‘login canceled’
+        })
+       break;
+     default:
+       reject({
+         type: ‘error’,
+         msg: ‘login failed’
+       })
+    }
+  })
+  .then((token) => {
+    accessToken = token;
+    return fetch(`https://graph.facebook.com/me?fields=id,name,email,birthday&access_token=${token}`);
+  })
+  .then((response) => {
+     return response.json();
+  })
+  .then((facebookJSONResponse) => {
+    console.log({ facebookJSONResponse });
+    if (facebookJSONResponse.hasOwnProperty(‘error’)) {
+      reject({
+        type: ‘error’,
+      });
+    }
+    resolve({
+      type: ‘success’,
+      credentials: Object.assign({}, facebookJSONResponse, { accessToken })
+    });
+  })
+  .catch(function (error) {
+    reject({
+      type: ‘error’,
+      msg: ‘Facebook login failed’
+    })
+  });
+ });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Response {
+"_bodyBlob": Blob {
+  "_data": Object {
+    "blobId": "14c5157d-396f-4c18-a8f2-462bd3b6f323",
+    "offset": 0,
+    "size": 70,
+  },
+},
+"_bodyInit": Blob {
+  "_data": Object {
+    "blobId": "14c5157d-396f-4c18-a8f2-462bd3b6f323",
+    "offset": 0,
+    "size": 70,
+  },
+},
+"bodyUsed": true,
+"headers": Headers {
+  "map": Object {
+    "access-control-allow-origin": Array [
+      "*",
+    ],
+    "cache-control": Array [
+      "public, max-age=0",
+    ],
+    "content-length": Array [
+      "70",
+    ],
+    "content-type": Array [
+      "text/javascript; charset=UTF-8",
+    ],
+    "date": Array [
+      "Wed, 27 Jun 2018 20:56:22 GMT",
+     ],
+     "etag": Array [
+       "\"772222457aa2dfc43d802602a337ed6c87986b4a\"",
+     ],
+     "expires": Array [
+       "Sat, 01 Jan 2000 00:00:00 GMT",
+     ],
+     "facebook-api-version": Array [
+       "v3.0",
+     ],
+     "strict-transport-security": Array [
+       "max-age=15552000; preload",
+     ],
+     "x-app-usage": Array [
+       "{\"call_count\":16,\"total_cputime\":0,\"total_time\":1}",
+     ],
+     "x-fb-debug": Array [
+       "x23MGqTnn7jBRTz5wqJwEwW81degVawwQcFBuyfr4gzgL04aYgD0FSdBsVymRhZwtDyed7uLmbuITchvk8N7ng==",
+      ],
+      "x-fb-rev": Array [
+        "4052707",
+      ],
+      "x-fb-trace-id": Array [
+        "AmaogFaK5Lw",
+      ],
+    },
+  },
+  "ok": true,
+  "status": 200,
+  "statusText": undefined,
+  "type": "default",
+  "url": "https://graph.facebook.com/me?fields=id,name,email,birthday&access_token=EAAWlVZCqNM3YBACJwyP6BERXFq99lMLYFXZBRtFl6X2KxGfm3SMg1edVE5AHq7cdKBoAwJSbDJJpUuMhZCRazSwDcfL9r2LdbrF6auqGCZCD3aj4MIh3ynRmpQ1eqZBBqgjEyJUbz7fulZCPazigGbarBAQgcsVBzJqr8e38zsBK4Er34ZAAkafQzeal60Hw0UNIaqvKMJKgZCgZA3ZB4iNAp8p6uZBIY7qSHMZD",
+  }
+
+
+  {"picture":{
+    "data":{
+      "height":200,
+      "is_silhouette":false,
+      "url":"https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=786236165099740&height=200&width=200&ext=1530531482&hash=AeRMgDKsZHj7Z13A",
+      "width":200}},
+    "birthday":"03/10/1986",
+    "gender":"male",
+    "location":{
+      "id":"106078429431815",
+      "name":"London, United Kingdom"}}
+  
+
+  let accessToken = '';
+    Expo.Facebook.logInWithReadPermissionsAsync('1589172167848822', {
+      permissions: ['public_profile', 'user_birthday', 'user_location', 'user_gender']
+    })
+      .then(response => {
+        switch (response.type) {
+          case 'success':
+            const credential = firebase.auth.FacebookAuthProvider.credential(response.token);
+
+            firebase
+              .auth()
+              .signInAndRetrieveDataWithCredential(credential)
+              .catch(error => {
+                Alert.alert('Try Again');
+                console.log(`firebase auth error${error}`);
+              });
+            return response.token;
+          case 'cancel':
+            reject({
+              type: 'error',
+              msg: 'login canceled'
+            });
+            console.log('cancel');
+            break;
+          default:
+            reject({
+              type: 'error',
+              msg: 'login failed'
+            });
+        }
+      })
+      .then(token => {
+        accessToken = token;
+        return fetch(
+          `https://graph.facebook.com/me?access_token=${token}&fields=id,birthday,location,gender,picture.type(large)`
+        );
+      })
+      .then(response => response.json())
+      .then(facebookJSONResponse => {
+        console.log({ facebookJSONResponse });
+        if (facebookJSONResponse.hasOwnProperty('error')) {
+          reject({
+            type: 'error'
+          });
+        }
+        resolve({
+          type: 'success',
+          credentials: Object.assign({}, facebookJSONResponse, { accessToken })
+        });
+      })
+      .catch((error) => {
+        reject({
+          type: 'error',
+          msg: 'Facebook login failed'
+        });
+      });
+
+
+
+
+      {
+        "name":"Bender Ander",
+        "picture":{
+          "data":{
+            "height":200,
+            "is_silhouette":false,
+            "url":"https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=786236165099740&height=200&width=200&ext=1530535200&hash=AeSDQyTWDEZ-GRTE",
+            "width":200
+            }
+          },
+        "birthday":"03/10/1986",
+        "gender":"male",
+        "location":{
+          "id":"106078429431815",
+          "name":"London, United Kingdom"
+          },
+        "token":"EAAWlVZCqNM3YBAGTUJcRbxhqEofRkIyXehTG8sWse1LwMRYBBOOsL8hXDQXkODLVCquRq2A84mZCDE6UVENCKZApRXN2z3PRAorSBNWJpBJsyLqpHSVlkdYvWZAw9DnUnNBYh5nU8W7Ffqs3FqwNe3R8dFEYvCwgrmKPalTROW9tK01pmF1FYeZACbBft5ABGrhJEvZC5qEWRbojeQ93WEjEbmZCr8L2moZD"
+      }        
