@@ -29,12 +29,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  TextInput: {
-    width: deviceWidth,
-    padding: 15,
-    backgroundColor: '#fff',
-    height: 100
-  },
+
   bold: {
     padding: 10,
     fontSize: 18,
@@ -51,20 +46,37 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold'
   },
-  card: {
-    width: deviceWidth * 0.9,
-    height: deviceHeight * 0.75,
-    borderRadius: 50
+
+  //Profile Screen Styles
+  profileImageContainer: {
+    width: deviceWidth,
+    height: deviceHeight * 0.4,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  cardDescription: {
+  profileBackgroundImage: {
+    width: deviceWidth,
+    height: deviceHeight * 0.4,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  imageText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white'
+  },
+  TextInput: {
+    width: deviceWidth,
     padding: 15,
-    justifyContent: 'flex-end',
-    flex: 1
-  },
-  cardInfo: {
     backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 10
+    height: 100,
+    borderBottomWidth: 1,
+    borderColor: '#d4d5d6',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 5
   }
 });
 

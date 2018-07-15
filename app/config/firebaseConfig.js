@@ -3,7 +3,7 @@ const firebaseConfig = {
   authDomain: 'voilavo-a59eb.firebaseapp.com',
   databaseURL: 'https://voilavo-a59eb.firebaseio.com',
   projectId: 'voilavo-a59eb',
-  storageBucket: '',
+  storageBucket: 'gs://voilavo-a59eb.appspot.com',
   messagingSenderId: '894866433032'
 };
 

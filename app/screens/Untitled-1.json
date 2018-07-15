@@ -1,3 +1,147 @@
+
+
+// File or Blob named mountains.jpg
+var file = ...
+
+// Create the file metadata
+var metadata = {
+  contentType: 'image/jpeg'
+};
+
+// Upload file and metadata to the object 'images/mountains.jpg'
+var uploadTask = storageRef.child('images/' + file.name).put(file, metadata);
+
+// Listen for state changes, errors, and completion of the upload.
+uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+  function(snapshot) {
+    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    console.log('Upload is ' + progress + '% done');
+    switch (snapshot.state) {
+      case firebase.storage.TaskState.PAUSED: // or 'paused'
+        console.log('Upload is paused');
+        break;
+      case firebase.storage.TaskState.RUNNING: // or 'running'
+        console.log('Upload is running');
+        break;
+    }
+  }, function(error) {
+
+  // A full list of error codes is available at
+  // https://firebase.google.com/docs/storage/web/handle-errors
+  switch (error.code) {
+    case 'storage/unauthorized':
+      // User doesn't have permission to access the object
+      break;
+
+    case 'storage/canceled':
+      // User canceled the upload
+      break;
+
+    ...
+
+    case 'storage/unknown':
+      // Unknown error occurred, inspect error.serverResponse
+      break;
+  }
+}, function() {
+  // Upload completed successfully, now we can get the download URL
+  uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+    console.log('File available at', downloadURL);
+  });
+});
+
+
+
+
+
+        .on(
+          firebase.storage.TaskEvent.STATE_CHANGED,
+          
+         
+          () => {
+            // Upload completed successfully, now we can get the download URL
+            uploadImage.snapshot.ref.getDownloadURL().then(downloadURL => {
+              console.log('File available at', downloadURL);
+            });
+          }
+        );
+
+
+
+
+
+pickImage = async () => {
+  console.log('picking image...');
+  const result = await ImagePicker.launchImageLibraryAsync({
+    allowsEditing: true,
+    aspect: [4, 3]
+  });
+
+  console.log(result);
+
+  if (!result.cancelled) {
+    this.setState({ image: result.uri });
+    console.log(result.uri);
+  }
+};
+
+onChooseImagePress = async () => {
+  // Permissions.askAsync(Permissions.CAMERA).then(result => {
+  //   if (result) {
+  // console.log('Permision granted', result);
+  // const image = await ImagePicker.launchCameraAsync({
+  //   allowsEditing: true,
+  //   aspect: [3, 5]
+  // });
+  // let image = await ImagePicker.launchImageLibraryAsync({
+  //   allowsEditing: true,
+  //   aspect: [3, 5]
+  // });
+  // console.log('result 1', image);} else console.log('Permision NOT granted', result);}
+  //  if (!result.cancelled) {
+  //   console.log('result 2', result);
+  //   this.uploadImage(result.uri, 'test-image')
+  //     .then(() => {
+  //       console.log('result success', result);
+  //       Alert.alert('Success');
+  //     })
+  //     .catch(error => {
+  //       Alert.alert(error);
+  //     });
+  // }
+};
+
+uploadImage = async (uri, imageName) => {
+  const response = await fetch(uri);
+  const blob = await response.blob();
+
+  const ref = firebase
+    .storage()
+    .ref()
+    .child(`images/${imageName}`);
+  return ref.put(blob);
+};
+
+
+
+<ImageBackground
+          style={styles.card}
+          source={{ uri: this.props.images[this.state.num] }}
+          resizeMethod="resize"
+        >
+          <View style={styles.cardDescription}>
+            <View style={styles.cardInfo}>
+              <Text style={[styles.bold, { color: 'grey', fontSize: 22 }]}>
+                {this.splitString(this.props.name)}, {this.getAge()}
+              </Text>
+              <Text>{this.props.aboutMe}</Text>
+            </View>
+          </View>
+        </ImageBackground>
+
+
+
 {
   "aboutMe":" Hello I am Arif\n",
   "birthday":"10/30/1985",
@@ -94,42 +238,6 @@ updateDB(fullPath, params) {
     .ref(fullPath)
     .update(params);
 }
-
-
-
-
-
-
-{
-  "uid":"3EalgzIoWWelEV28MMAECZw29fm2",
-  "displayName":"Bender Ander",
-  "photoURL":"https://graph.facebook.com/786236165099740/picture",
-  "email":null,
-  "emailVerified":false,
-  "phoneNumber":null,
-  "isAnonymous":false,
-  "providerData":[{
-    "uid":"786236165099740",
-    "displayName":"Bender Ander",
-    "photoURL":"https://graph.facebook.com/786236165099740/picture",
-    "email":null,
-    "phoneNumber":null,
-    "providerId":"facebook.com"
-    }],
-  "apiKey":"AIzaSyBWigPuTaPl5vJfYCOP94BfsqD6PYkagT0",
-  "appName":"[DEFAULT]",
-  "authDomain":"voilavo-a59eb.firebaseapp.com",
-  "stsTokenManager":{
-    "apiKey":"AIzaSyBWigPuTaPl5vJfYCOP94BfsqD6PYkagT0",
-    "refreshToken":"AGdpqey2qvnMBkkc0bgHKB_skKJlkpzlKSe0RRPW_o4GLxw8s60MOs8RBC62Ti1j-XpXGB47Iu0TIYl9DEx0z_Dh5K8Gjo3akyZm-MX3r13QkTRDcB80mAcLsohHK2i_CRgwJfHUS3OHjoPG-Yoj4Iy_d0vnnmQ7Dok7N88-F1KiTswWB92ELr1Dm9dh5sYlOiMBVYz5ReUyaVD91nthvXoJK5oydoZW4ME7jffdd7KNLmLu-zMlKn_RVivDaVzC51b9rz70GugyXNUF6bcJyDc-2j47lrA0PA",
-    "accessToken":"eyJhbGciOiJSUzI1NiIsImtpZCI6IjAwOTZhZDZmZjdjMTIwMzc5MzFiMGM0Yzk4YWE4M2U2ZmFkOTNlMGEifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vdm9pbGF2by1hNTllYiIsIm5hbWUiOiJCZW5kZXIgQW5kZXIiLCJwaWN0dXJlIjoiaHR0cHM6Ly9ncmFwaC5mYWNlYm9vay5jb20vNzg2MjM2MTY1MDk5NzQwL3BpY3R1cmUiLCJhdWQiOiJ2b2lsYXZvLWE1OWViIiwiYXV0aF90aW1lIjoxNTMwMjcwODQzLCJ1c2VyX2lkIjoiM0VhbGd6SW9XV2VsRVYyOE1NQUVDWncyOWZtMiIsInN1YiI6IjNFYWxneklvV1dlbEVWMjhNTUFFQ1p3MjlmbTIiLCJpYXQiOjE1MzAyNzU1ODUsImV4cCI6MTUzMDI3OTE4NSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJmYWNlYm9vay5jb20iOlsiNzg2MjM2MTY1MDk5NzQwIl19LCJzaWduX2luX3Byb3ZpZGVyIjoiZmFjZWJvb2suY29tIn19.lhr7mTi-7TohzTdQPdwMo7XTo5sNyiAdMDCHthHcn8ElMDjSBaNetz40zmesbqygzA6TkZbepf9yM1ApxoBD2FynTfNYoDFN3TdIKQd2yUDM9vWHUW9AxLyADLKpaYk_vyFv6qzloi8s-g5CbmDRJtYRFwWR9J-7Y6BQ3ln_-9OR8X6ILif5NcmHOuvDNGDt0t0Ux3WbZCRj_NkNSuDjlj7972Hzf4OoReT0-pr-ycc_imhp6bVzf6B2FCmSinI29yT7d5XZ0uxmOnNDMQRQUZLmA6_IyVB6rRJslNsj6kLBGQL6nR_hUdIVrtH-UaHRwLUeiT_uCdSo-bkwgPU0Hg",
-    "expirationTime":1530279186382
-    },
-  "redirectEventId":null,
-  "lastLoginAt":"1530271454000",
-  "createdAt":"1530226624000"
-}
-
 
 
 {

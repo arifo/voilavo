@@ -8,12 +8,14 @@ import {
   TOGGLE_BUTTON_LOADING,
   UPDATE_INFO,
   GET_CARDS,
-  GET_LOCATION
+  GET_LOCATION,
+  ALLOW_NOTIFICATIONS
 } from '../actions/types';
 
 const initialState = {
   loggedIn: false,
   isUploaded: false,
+  cards: [],
   user: {
     id: '',
     name: '',
@@ -72,10 +74,11 @@ export default (state = initialState, action) => {
     case GET_LOCATION: {
       return { ...state, user: { ...state.user, geocode: action.payload } };
     }
-    // case LOGIN_USER_SUCCESS:
-    //   return { ...state, user: action.payload, error: '', loading: false, email: '', password: '' };
-    // case LOGIN_USER_FAIL:
-    //   return { ...state, error: 'Authentication Failed Mate!', loading: false };
+    case ALLOW_NOTIFICATIONS:
+      return {
+        ...state,
+        user: { ...state.user, token: action.payload }
+      };
     default:
       return state;
   }

@@ -1,13 +1,17 @@
 import React from 'react';
-import { TouchableOpacity, Text, Dimensions, ActivityIndicator } from 'react-native';
+import { TouchableOpacity, Text, Dimensions, ActivityIndicator, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo';
 
 const deviceWidth = Dimensions.get('window').width;
 
-const Button = ({ onPress, colors, text, loading, disabled }) => (
+const Button = ({ onPress, colors, text, textColor, loading, disabled }) => (
   <TouchableOpacity onPress={onPress} style={styles.button} disabled={disabled}>
-    <LinearGradient colors={colors} style={styles.linearStyle}>
-      {loading ? <ActivityIndicator /> : <Text style={styles.buttonText}>{text}</Text>}
+    <LinearGradient start={[0.1, 0]} end={[1, 0]} colors={colors} style={styles.linearStyle}>
+      {loading ? (
+        <ActivityIndicator />
+      ) : (
+        <Text style={[styles.buttonText, { color: textColor }]}>{text}</Text>
+      )}
     </LinearGradient>
   </TouchableOpacity>
 );
@@ -16,8 +20,10 @@ export default Button;
 
 const styles = {
   button: {
-    width: deviceWidth * 0.75,
-    borderRadius: 25,
+    width: deviceWidth * 0.95,
+    borderRadius: 3,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: '#d6d6d6',
     marginVertical: 7,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -34,6 +40,6 @@ const styles = {
   linearStyle: {
     padding: 15,
     alignItems: 'center',
-    borderRadius: 25
+    borderRadius: 3
   }
 };

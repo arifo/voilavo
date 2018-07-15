@@ -1,201 +1,91 @@
 import React, { Component } from 'react';
-import { View, Text, Image, ScrollView, StyleSheet, Dimensions } from 'react-native';
+import * as firebase from 'firebase';
 import { connect } from 'react-redux';
+import { GiftedChat } from 'react-native-gifted-chat';
 
-//TODO HEADER height
+import { sendNotification } from '../redux/actions';
 
-// class Chat extends Component {
-//   static navigationOptions = ({ navigation }) => ({
-//     title: 'Title',
-//     headerStyle: { height: 50, backgroundColor: '#f4511e' }
-//   });
-//   render() {
-//     return (
-//       <View>
-//         <Text>Chat Screen</Text>
-//       </View>
-//     );
-//   }
-// }
-const { height, width } = Dimensions.get('window');
-export default class Profile extends Component {
-  constructor(props) {
-    super(props);
+class Chat extends Component {
+  state = {
+    messages: []
+  };
 
-    this.state = {
-      friends: 1098
-    };
+  componentWillMount() {
+    // firebase
+    //   .database()
+    //   .ref(`cards/${this.props.user.id}/chats/${this.props.navigation.state.params.user.id}`)
+    //   .on('value', snap => {
+    //     const items = [];
+    //     snap.forEach(child => {
+    //       if (child.val().key !== 'user') {
+    //         const item = child.val();
+    //         if (item.id !== firebase.auth().currentUser.uid) {
+    //           items.push(item);
+    //         }
+    //       }
+    //     });
+    //     //  this.setState({ messages: items.reverse() });
+    //   });
   }
+
+  onSend(messages = []) {
+    this.props.sendNotification(
+      this.props.navigation.state.params.user.id,
+      messages[0].user.name,
+      messages[0].text
+    );
+    this.setState(previousState => ({
+      messages: GiftedChat.append(previousState.messages, messages)
+    }));
+    for (let i = 0; i < messages.length; i++) {
+      const { text, user, _id } = messages[i];
+
+      const message = {
+        _id,
+        text,
+        createdAt: new Date(Date.UTC(2016, 5, 11, 17, 20, 0)),
+        user
+      };
+      console.log('message', message, 'messagesssss', messages);
+
+      firebase
+        .database()
+        .ref(`cards/${this.props.user.id}/chats/${this.props.navigation.state.params.user.id}`)
+        .push(this.state.messages[0]);
+      firebase
+        .database()
+        .ref(`cards/${this.props.navigation.state.params.user.id}/chats/${this.props.user.id}`)
+        .push(this.state.messages[0]);
+    }
+  }
+
   render() {
+    const { id, name, images } = this.props.user;
+
+    // console.log('user ID', id, 'USER name', name, 'user PhotoURL', images[0]);
+    console.log('state messages', this.state.messages);
     return (
-      <View style={{ flex: 1 }}>
-        <ScrollView style={styles.container}>
-          <Image
-            source={require('../assets/logo.png')}
-            resizeMode="stretch"
-            style={{ height: 350, width }}
-          />
-          <View style={[styles.row, { marginTop: 15 }]}>
-            <Text style={{ fontSize: 19, fontWeight: '400' }}>Samuel, </Text>
-            <Text style={{ fontSize: 21, fontWeight: '300', marginBottom: -2 }}>23</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={{ color: '#444', fontSize: 15 }}>Unappers Creative</Text>
-          </View>
-          <View style={styles.row}>
-            <Text style={{ color: '#777', fontSize: 11 }}>less than a mile away</Text>
-          </View>
-          <View style={styles.description}>
-            <Text style={{ color: '#555' }}>
-              We hook up, you do my laundry, I promise to call you but never really.
-            </Text>
-          </View>
-          <View style={styles.commons}>
-            <Text style={styles.title}>{this.state.friends} for Common Connections</Text>
-            <Text style={{ marginTop: 10, fontSize: 14, color: '#666', fontWeight: '400' }}>
-              We compare your Facebook friends with those of your matches to display any common
-              connections
-            </Text>
-          </View>
-          <View style={styles.commons}>
-            <Text style={styles.title}>Instagram Photos</Text>
-            <ScrollView horizontal>
-              <View style={{}}>
-                <Image
-                  source={require('../assets/logo.png')}
-                  resizeMode="stretch"
-                  style={{ height: 100, width: 100, margin: 5 }}
-                />
-                <Image
-                  source={require('../assets/logo.png')}
-                  resizeMode="stretch"
-                  style={{ height: 100, width: 100, margin: 5 }}
-                />
-              </View>
-              <View style={{}}>
-                <Image
-                  source={require('../assets/logo.png')}
-                  resizeMode="stretch"
-                  style={{ height: 100, width: 100, margin: 5 }}
-                />
-                <Image
-                  source={require('../assets/logo.png')}
-                  resizeMode="stretch"
-                  style={{ height: 100, width: 100, margin: 5 }}
-                />
-              </View>
-              <View style={{}}>
-                <Image
-                  source={require('../assets/logo.png')}
-                  resizeMode="stretch"
-                  style={{ height: 100, width: 100, margin: 5 }}
-                />
-                <Image
-                  source={require('../assets/logo.png')}
-                  resizeMode="stretch"
-                  style={{ height: 100, width: 100, margin: 5 }}
-                />
-              </View>
-              <View style={{}}>
-                <Image
-                  source={require('../assets/logo.png')}
-                  resizeMode="stretch"
-                  style={{ height: 100, width: 100, margin: 5 }}
-                />
-                <Image
-                  source={require('../assets/logo.png')}
-                  resizeMode="stretch"
-                  style={{ height: 100, width: 100, margin: 5 }}
-                />
-              </View>
-              <View style={{}}>
-                <Image
-                  source={require('../assets/logo.png')}
-                  resizeMode="stretch"
-                  style={{ height: 100, width: 100, margin: 5 }}
-                />
-                <Image
-                  source={require('../assets/logo.png')}
-                  resizeMode="stretch"
-                  style={{ height: 100, width: 100, margin: 5 }}
-                />
-              </View>
-              <View style={{}}>
-                <Image
-                  source={require('../assets/logo.png')}
-                  resizeMode="stretch"
-                  style={{ height: 100, width: 100, margin: 5 }}
-                />
-                <Image
-                  source={require('../assets/logo.png')}
-                  resizeMode="stretch"
-                  style={{ height: 100, width: 100, margin: 5 }}
-                />
-              </View>
-            </ScrollView>
-          </View>
-        </ScrollView>
-      </View>
+      <GiftedChat
+        messages={this.state.messages}
+        onSend={messages => this.onSend(messages)}
+        renderDay={day => console.log('day', day)}
+        user={{
+          _id: id,
+          name,
+          avatar: images[0]
+        }}
+      />
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+function mapStateToProps(state) {
+  return {
+    user: state.auth.user
+  };
+}
 
-    backgroundColor: '#f7f7f7'
-  },
-  row: {
-    flexDirection: 'row',
-    margin: 15,
-    marginBottom: 0,
-    marginTop: 5,
-    alignItems: 'flex-end'
-  },
-  title: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#333'
-  },
-  commons: {
-    padding: 15
-  },
-  buttons: {
-    width: 80,
-    height: 80,
-    borderWidth: 10,
-    borderColor: '#e7e7e7',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 40
-  },
-  description: {
-    padding: 15,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: '#e3e3e3',
-    marginTop: 10,
-    marginBottom: 10
-  },
-  buttonSmall: {
-    width: 50,
-    height: 50,
-    borderWidth: 10,
-    borderColor: '#e7e7e7',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 25
-  },
-  card: {
-    flex: 1,
-    alignItems: 'center',
-    alignSelf: 'center',
-    borderWidth: 2,
-    borderColor: '#e3e3e3',
-    width: 350,
-    height: 420
-  }
-});
-
-// export default connect()(Chat);
+export default connect(
+  mapStateToProps,
+  { sendNotification }
+)(Chat);

@@ -2,15 +2,17 @@ import React, { Component } from 'react';
 import {
   View,
   Dimensions,
-  StyleSheet,
   TouchableOpacity,
-  Image,
-  ActivityIndicator
+  Text,
+  ActivityIndicator,
+  PlatformIOS
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
+import Image from 'react-native-image-progress';
+import * as Progress from 'react-native-progress';
 
-import { uploadImages, deleteImages, changeImageIndex } from '../redux/actions';
+import * as actions from '../redux/actions';
 
 const deviceWidth = Dimensions.get('window').width;
 
@@ -18,8 +20,11 @@ class ImageContainer extends Component {
   state = {
     selectedImages: []
   };
+
   addImage() {
-    this.props.uploadImages(this.props.user.images);
+    console.log('add image pressed');
+    //this.props.uploadImagesToAWSS3(this.props.user.images);
+    this.props.uploadImagesToFirebaseStorage(this.props.user.images);
   }
   deleteImage() {
     this.self.props.deleteImages(this.self.props.user.images, this.key);
@@ -32,12 +37,15 @@ class ImageContainer extends Component {
       <View style={styles.container}>
         {user.images.map((uri, key) => {
           const isLastElement = user.length - 1 === key;
-
+          if (key === 0) {
+            return;
+          }
           if (uri !== undefined) {
             return (
               <TouchableOpacity
                 key={key}
                 style={styles.imageContainer}
+                activeOpacity={0.9}
                 onPress={() => {
                   this.props.changeImageIndex(user.images, key);
                 }}
@@ -46,14 +54,30 @@ class ImageContainer extends Component {
                   <ActivityIndicator size="large" />
                 ) : (
                   <View>
-                    <Image style={styles.imageStyle} source={{ uri }} resizeMethod="resize" />
+                    <Image
+                      source={{ uri }}
+                      indicator={prog => (
+                        <Progress.Circle
+                          style={styles.progress}
+                          progress={prog.progress}
+                          indeterminate={prog.indeterminate}
+                          borderWidth={2}
+                        />
+                      )}
+                      resizeMethod="resize"
+                      style={styles.imageStyle}
+                    />
 
                     <TouchableOpacity
                       style={styles.iconContainer}
                       // onPress={this.deleteImage.bind({ self: this, key })}
                       onPress={() => this.props.deleteImages(user.images, key)}
                     >
-                      <Ionicons name="ios-close-circle" size={25} style={{ color: '#ef0b57' }} />
+                      <MaterialCommunityIcons
+                        name="close-box-outline"
+                        size={17}
+                        style={{ color: '#ef0b57' }}
+                      />
                     </TouchableOpacity>
                   </View>
                 )}
@@ -62,9 +86,14 @@ class ImageContainer extends Component {
           }
           return console.log('uri undefined');
         })}
-        {user.images.length <= 5 ? (
+        {user.images.length <= 6 ? (
           <TouchableOpacity style={styles.imageContainer} onPress={this.addImage.bind(this)}>
-            <Ionicons name="ios-add-circle" size={50} style={{ color: '#b7bbbf' }} />
+            <Ionicons
+              name={PlatformIOS ? 'ios-photos' : 'md-photos'}
+              size={50}
+              style={{ color: '#b7bbbf' }}
+            />
+            <Text style={styles.text}>Add photo</Text>
           </TouchableOpacity>
         ) : null}
       </View>
@@ -79,16 +108,16 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { uploadImages, deleteImages, changeImageIndex }
+  actions
 )(ImageContainer);
 
 const styles = {
   container: {
     width: deviceWidth,
-    height: deviceWidth * 0.7,
+    //height: deviceWidth * 0.7,
     padding: 3,
     //borderWidth: 1,
-    // backgroundColor: '#d4f4d4',
+    backgroundColor: '#F0F0F0',
     flexWrap: 'wrap',
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -113,25 +142,24 @@ const styles = {
   imageStyle: {
     width: deviceWidth * 0.3,
     height: deviceWidth * 0.3,
-    borderRadius: 5
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: '#d4d5d6'
   },
   iconContainer: {
-    width: 25,
-    height: 25,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     position: 'absolute',
-    bottom: 0,
+    bottom: -25,
+    right: -25,
     alignSelf: 'flex-end',
-    alignItems: 'flex-end'
+    alignItems: 'flex-start',
+    padding: 7,
+    backgroundColor: '#d4d5d6'
   },
-  separator: {
-    width: deviceWidth * 0.65,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: '#d6d7d8',
-    marginVertical: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 1
+  text: {
+    fontSize: 12,
+    color: '#b7bbbf'
   }
 };

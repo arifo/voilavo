@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import * as firebase from 'firebase';
 
 import firebaseConfig from '../config/firebaseConfig';
+import fbConfig from '../config/fbConfig';
 import RootNavigator from '../navigation/RootNavigator';
 import * as actions from '../redux/actions';
 import styles from '../../styles';
 
 import Button from '../components/Button';
 
-console.ignoredYellowBox = ['Setting a timer'];
 firebase.initializeApp(firebaseConfig);
 
 class Login extends Component {
@@ -73,19 +73,17 @@ class Login extends Component {
     this.props.toggleButtonLoading(true);
     this.setState({ buttonLoading: true });
     try {
-      const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(
-        '1589172167848822',
-        {
-          permissions: ['public_profile', 'user_birthday', 'user_location', 'user_gender']
-        }
-      );
+      const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(fbConfig.APIKey, {
+        permissions: ['public_profile', 'user_birthday', 'user_location', 'user_gender']
+      });
       if (type === 'success') {
         const credential = await firebase.auth.FacebookAuthProvider.credential(token);
         const response = await fetch(
-          `https://graph.facebook.com/me?access_token=${token}&fields=birthday,location,gender,picture.type(large)`
+          `https://graph.facebook.com/me?access_token=${token}&fields=birthday,location,gender,picture.height(500)`
         );
         const { picture, birthday, gender, location } = await response.json();
         const photoURL = picture.data.url;
+        console.log('large fbimage', photoURL);
         const city = (location && location.name) || 'Somewhere on Earth';
         const value = { photoURL, birthday, gender, city };
         this.props.saveFetchedUserData(value);
@@ -116,22 +114,25 @@ class Login extends Component {
         <ActivityIndicator size="large" />
       </View>
     ) : (
-      <View style={[styles.container, styles.center, { backgroundColor: '#10131A' }]}>
+      <View style={[styles.container, styles.center, { backgroundColor: '#2d0009' }]}>
         <Image
-          source={require('../assets/logo.png')}
-          style={[styles.img, { width: 350, height: 180, marginVertical: 20 }]}
+          source={require('../assets/voosh-logo.png')}
+          style={[styles.img, { width: 250, height: 180, marginVertical: 20 }]}
+          resizeMode="contain"
         />
         <Button
           onPress={this.onLogin}
-          colors={['#4c669f', '#3b5998', '#192f6a']}
+          colors={['#4c669f', '#3b5998']} //, '#192f6a'
           text="LOGIN WITH FACEBOOK"
+          textColor="white"
           disabled={buttonLoading}
           loading={buttonLoading}
         />
         <Button
           onPress={this.onPhoneAuth}
-          colors={['#eff1f2', '#c2c5c6', '#424242']}
+          colors={['#eff1f2', '#c2c5c6']} // ,
           text="LOGIN WITH PHONENUMBER"
+          textColor="#424242"
         />
       </View>
     );

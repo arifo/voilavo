@@ -14,7 +14,8 @@ import {
   TOGGLE_BUTTON_LOADING,
   UPDATE_INFO,
   GET_CARDS,
-  GET_LOCATION
+  GET_LOCATION,
+  ALLOW_NOTIFICATIONS
 } from './types';
 import awsConfig from '../../config/awsConfig';
 
@@ -48,7 +49,7 @@ export function loginAction(user, value) {
             ? snapshot.val()
             : { ...snapshot.val(), images: [] };
           dispatch({ type: LOGIN, user: newSnapshot, loggedIn: true });
-          // dispatch(allowNotification());
+          dispatch(allowNotifications());
         } else {
           firebase
             .database()
@@ -79,11 +80,92 @@ export function logoutAction() {
   };
 }
 
-export function uploadImages(images) {
+export function uploadImagesToFirebaseStorage(images) {
+  return dispatch => {
+    const array = images;
+    Permissions.getAsync(Permissions.CAMERA_ROLL).then(status => {
+      if (status !== 'granted') {
+        console.log(status);
+        Alert.alert('Please provide permission for Camera roll');
+        return;
+      }
+    });
+
+    const uploadImage = async (uri, imageName) => {
+      console.log('   imagename   ', imageName, 'uri for imagename', uri);
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      const ref = firebase
+        .storage()
+        .ref()
+        .child(`images/${imageName}`);
+      const uploadTask = ref.put(blob);
+
+      uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, snapshot => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log(`Upload is ${progress}% done`);
+        switch (snapshot.state) {
+          case firebase.storage.TaskState.PAUSED:
+            console.log('Upload is paused');
+            break;
+          case firebase.storage.TaskState.RUNNING:
+            console.log('Upload is running');
+            break;
+          default:
+            return;
+        }
+      });
+
+      uploadTask.then(() => {
+        uploadTask.snapshot.ref.getDownloadURL().then(downloadURL => {
+          if (downloadURL === undefined) {
+            return;
+          }
+
+          array.push(downloadURL);
+          firebase
+            .database()
+            .ref(`cards/${firebase.auth().currentUser.uid}/images`)
+            .set(array)
+            .then(() => {
+              dispatch({ type: UPLOAD_SUCCESS, payload: true });
+              dispatch({ type: UPLOAD_IMAGE, payload: array });
+              dispatch({ type: TOGGLE_LOADING, payload: false });
+            });
+        });
+      });
+      return uploadTask;
+    };
+
+    const options = {
+      allowsEditing: true,
+      aspect: [1, 1],
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 0.5
+    };
+
+    ImagePicker.launchImageLibraryAsync(options).then(result => {
+      if (result.uri === undefined) {
+        return;
+      }
+      if (!result.cancelled) {
+        uploadImage(result.uri, result.uri)
+          .then(() => {
+            console.log('Upload Success', result);
+          })
+          .catch(error => {
+            console.log('upload error', error);
+          });
+      }
+    });
+  };
+}
+
+export function uploadImagesToAWSS3(images) {
   return dispatch => {
     ImagePicker.launchImageLibraryAsync({ allowsEditing: false }).then(result => {
       const array = images;
-
+      console.log('result on old', result);
       if (result.uri === undefined) {
         return;
       }
@@ -98,8 +180,8 @@ export function uploadImages(images) {
 
       const options = {
         keyPrefix: 'uploads/',
-        bucket: 'voilavo',
-        region: 'us-east-2',
+        bucket: awsConfig.bucket,
+        region: awsConfig.region,
         accessKey: awsConfig.accessKey,
         secretKey: awsConfig.secretKey,
         successActionStatus: 201
@@ -117,7 +199,7 @@ export function uploadImages(images) {
               dispatch({ type: UPLOAD_IMAGE, payload: array });
               dispatch({ type: TOGGLE_LOADING, payload: false });
             });
-        }
+        } else console.log('AWS S3 image upload response', response);
       });
     });
   };
@@ -125,8 +207,6 @@ export function uploadImages(images) {
 
 export const changeImageIndex = (images, key) => dispatch => {
   const array = images;
-  // const imageToUnshift = array.splice(key, 1);
-  // array.unshift(...imageToUnshift);
   const swap = (arr, a, b) => ([arr[a], arr[b]] = [arr[b], arr[a]]) && arr;
   const result = swap(array, 0, key);
   dispatch({ type: UPLOAD_IMAGE, payload: result });
@@ -185,7 +265,9 @@ export function getCards(geocode) {
         snap.forEach(child => {
           const item = child.val();
           item.id = child.key;
-          items.push(item);
+          if (item.id !== firebase.auth().currentUser.uid) {
+            items.push(item);
+          }
         });
         dispatch({ type: GET_CARDS, payload: items });
       });
@@ -196,7 +278,7 @@ export function getLocation() {
   return function (dispatch) {
     Permissions.askAsync(Permissions.LOCATION).then(result => {
       if (result) {
-        Location.getCurrentPositionAsync({}).then(location => {
+        Location.getCurrentPositionAsync({ enableHighAccuracy: true }).then(location => {
           const geocode = Geohash.encode(location.coords.latitude, location.coords.longitude, 3);
           firebase
             .database()
@@ -205,6 +287,7 @@ export function getLocation() {
           dispatch({ type: GET_LOCATION, payload: geocode });
         });
       }
+      console.log('location services permission', result);
     });
   };
 }
@@ -218,3 +301,43 @@ export const toggleButtonLoading = loading => ({
   type: TOGGLE_BUTTON_LOADING,
   payload: loading
 });
+
+export function allowNotifications() {
+  return function (dispatch) {
+    Permissions.getAsync(Permissions.NOTIFICATIONS).then(result => {
+      if (result.status === 'granted') {
+        Notifications.getExpoPushTokenAsync().then(token => {
+          firebase
+            .database()
+            .ref(`cards/${firebase.auth().currentUser.uid}`)
+            .update({ token });
+          dispatch({ type: ALLOW_NOTIFICATIONS, payload: token });
+        });
+      }
+    });
+  };
+}
+
+export function sendNotification(id, name, text) {
+  return function (dispatch) {
+    firebase
+      .database()
+      .ref(`cards/${id}`)
+      .once('value', snap => {
+        if (snap.val().token != null) {
+          return fetch('https://exp.host/--/api/v2/push/send', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              to: snap.val().token,
+              title: name,
+              body: text
+            })
+          });
+        }
+      });
+  };
+}

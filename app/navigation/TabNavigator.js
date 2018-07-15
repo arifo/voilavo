@@ -1,4 +1,4 @@
-import { createMaterialTopTabNavigator } from 'react-navigation';
+import { createBottomTabNavigator } from 'react-navigation';
 import React from 'react';
 import { Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,7 +7,7 @@ import Home from '../screens/Home';
 import Profile from '../screens/Profile';
 import Matches from '../screens/Matches';
 
-export default createMaterialTopTabNavigator(
+export default createBottomTabNavigator(
   {
     Profile: {
       screen: Profile,
@@ -53,12 +53,15 @@ export default createMaterialTopTabNavigator(
       header: null
     },
     tabBarPosition: 'top',
-    initialRouteName: 'Home',
+    initialRouteName: 'Matches',
     animationEnabled: true,
     swipeEnabled: false,
     tabBarOptions: {
       style: {
-        height: 50
+        height: 50,
+        backgroundColor: '#eff1f2',
+        borderTopWidth: 1,
+        borderColor: '#c2c5c6'
       },
       showLabel: false,
       showIcon: true

@@ -8,6 +8,8 @@ import reducers from './app/redux/reducers';
 
 import Login from './app/screens/Login';
 
+console.ignoredYellowBox = ['Setting a timer', 'Warning'];
+
 const middlewares = [thunk];
 const store = createStore(reducers, applyMiddleware(...middlewares));
 
