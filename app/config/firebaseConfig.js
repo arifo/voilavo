@@ -1,10 +1,10 @@
 const firebaseConfig = {
-  apiKey: 'AIzaSyBWigPuTaPl5vJfYCOP94BfsqD6PYkagT0',
-  authDomain: 'voilavo-a59eb.firebaseapp.com',
-  databaseURL: 'https://voilavo-a59eb.firebaseio.com',
-  projectId: 'voilavo-a59eb',
-  storageBucket: 'gs://voilavo-a59eb.appspot.com',
-  messagingSenderId: '894866433032'
+    apiKey: "<API_KEY>",
+    authDomain: "<PROJECT_ID>.firebaseapp.com",
+    databaseURL: "https://<DATABASE_NAME>.firebaseio.com",
+    projectId: "<PROJECT_ID>",
+    storageBucket: "<BUCKET>.appspot.com",
+    messagingSenderId: "<SENDER_ID>",
 };
 
 module.exports = firebaseConfig;
