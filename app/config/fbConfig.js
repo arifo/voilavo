@@ -1,5 +1,5 @@
 const fbConfig = {
-  APIKey: '1589172167848822'
+  APIKey: <API_KEY>
 };
 
 module.exports = fbConfig;
